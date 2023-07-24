@@ -1,8 +1,9 @@
 #  api_upload --> load to database
 from airflow.decorators import dag, task
-from airflow.models import Variable
+from airflow.models import Variable, Connection
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.datasets import Dataset
 
 import pandas as pd
 from pandas import DataFrame
@@ -15,6 +16,7 @@ import sys
 
 
 COUNT_DATA_THRESHOLD = 10
+pg_table = Dataset(Connection.get_connection_from_secrets("postgres_weather").get_uri() + "?table=public.keys")
 
 
 @dag(
@@ -83,7 +85,7 @@ def weather_update_dag():
         sql="""DELETE FROM public.keys WHERE id != (SELECT id FROM public.keys ORDER BY date_saved DESC LIMIT 1);"""
     )
 
-    @task(task_id="load_to_postgres", trigger_rule='none_failed_or_skipped')
+    @task(task_id="load_to_postgres", trigger_rule='none_failed_or_skipped', outlets=[pg_table])
     def load_to_postgres(**kwargs):
         ti = kwargs["ti"]
         date_saved = ti.xcom_pull(task_ids='extract_from_api', key='date_saved')

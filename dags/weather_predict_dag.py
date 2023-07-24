@@ -4,7 +4,7 @@ from airflow.models import Connection
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.http.hooks.http import HttpHook
-from airflow.datasets.manager import Dataset
+from airflow import Dataset
 
 from pandas import DataFrame
 
@@ -94,6 +94,9 @@ def weather_predict_dag():
 
     extract_prepared_data() >> do_prediction() >> check_data_threshold() >> [clear_excess_data, load_to_pg]
     clear_excess_data >> load_to_pg
+
+
+pg_table = Dataset(Connection.get_connection_from_secrets("postgres_weather").get_uri() + "?table=public.keys")
 
 
 weather_predict_dag()
