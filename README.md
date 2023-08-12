@@ -18,14 +18,14 @@ the first DAG implements the ETL process, loading up-to-date data from several w
 processes them and uploads them to the database. 
 The second DAG is triggered from this database and performs precipitation prediction using the model deployed in the Docker container.
 <p></p>
-<img src="/home/dity/PycharmProjects/weather_forecast/weather_forecast.drawio.png"/>
+<img src="weather_forecast.drawio.png"/>
 <p></p>
 
 *Weather update DAG`s architecture:*
-<img src="/home/dity/PycharmProjects/weather_forecast/update_dag.png" title='DAG "weather_update"'>
+<img src="update_dag.png" title='DAG "weather_update"'>
 
 *Weather precipitation prediction DAG`s architecture:*
-<img src="/home/dity/PycharmProjects/weather_forecast/pred_dag.png" title="DAG &quot;weather prediction&quot;"/>
+<img src="pred_dag.png" title="DAG &quot;weather prediction&quot;"/>
 
 ## Machine Learning Model
 
@@ -34,4 +34,4 @@ A number of experiments were carried out and an ensemble model
 was chosen to solve the problem, namely GradientBoostingClassifier. 
 After training on the data for the last 5 years, 
 the following results were obtained:
-<img src="/home/dity/PycharmProjects/weather_forecast/training_confusion_matrix.png"/>
+<img src="training_confusion_matrix.png"/>
